@@ -13,10 +13,14 @@ Currently, this contains just __trained results__ of the paper, but we planned t
 
 ## Usage
 
+Because jar with dependency file is not uploaded, you need to run maven install first.
+If not, before this package is published in Maven repository, you need to specify dependencies of this package, which are declared in `pom.xml`.
+
 ### Run Demo Program
 To see how it works, you can simply run the jar file, with following shell script on root directory:
 
-```
+```bash
+maven clean install
 java -jar ./NPE-latest-jar-with-dependencies.jar
 ```
 
