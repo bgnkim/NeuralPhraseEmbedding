@@ -17,7 +17,7 @@ Because jar with dependency file is not uploaded, you need to run maven install 
 If not, before this package is published in Maven repository, you need to specify dependencies of this package, which are declared in `pom.xml`.
 
 ### Run Demo Program
-To see how it works, you can simply run the jar file, with following shell script on root directory:
+To see how it works, you can simply run the jar file, with following shell script on `/NeuralPhraseEmbedding` directory:
 
 ```bash
 maven clean install

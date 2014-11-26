@@ -61,8 +61,6 @@ $RECYCLE.BIN/
 # =========================
 target/
 .settings/
-.project
-.classpath
 *jar-with-dependencies.*
 
 # Compressed Files
