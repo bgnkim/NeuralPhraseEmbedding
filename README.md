@@ -1,7 +1,7 @@
 Neural Phrase Embedding v0.0.1-SNAPSHOT
 =======================================
 
-# Overview
+## Overview
 
 This package includes JAVA implementation of [(Socher et al., NIPS 2011)](http://www.socher.org/index.php/Main/DynamicPoolingAndUnfoldingRecursiveAutoencodersForParaphraseDetection), and intermediate vector extraction of [(Socher et al., ACL 2013)](http://www.socher.org/index.php/Main/ParsingWithCompositionalVectorGrammars).
 
@@ -11,9 +11,9 @@ Currently, this contains just __trained results__ of the paper, but we planned t
 - Recursive Auto Encoder *in (Socher et al., NIPS 2011)*
 - Unfolding Recursive Auto Encoder *in (Socher et al., NIPS 2011)*
 
-# Usage
+## Usage
 
-## Run Demo Program
+### Run Demo Program
 To see how it works, you can simply run the jar file, with following shell script on root directory:
 
 ```
@@ -22,13 +22,13 @@ java -jar ./NPE-latest-jar-with-dependencies.jar
 
 Then it automatically launches StanfordWrapper class. All you need to do is type the phrase when `Phrase?` prompt is shown.
 
-## Javadocs
+### Javadocs
 This package contains javadoc jar file, `NPE-latest-javadoc.jar`.
 
-## Basic Usage
+### Basic Usage
 Here is the sample code of StanfordWrapper `main` method
 
-```
+```java
 	public static void main(String[] args) {
 		final StanfordWrapper instance = StanfordWrapper.getInstance();
 
