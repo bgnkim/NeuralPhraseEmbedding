@@ -116,12 +116,12 @@
 			<groupId>edu.stanford.nlp</groupId>
 			<artifactId>stanford-parser</artifactId>
 			<classifier>models</classifier>
-			<version>3.5.0</version>
+			<version>3.4</version>
 		</dependency>
 		<dependency>
 			<groupId>edu.stanford.nlp</groupId>
 			<artifactId>stanford-parser</artifactId>
-			<version>3.5.0</version>
+			<version>3.4</version>
 		</dependency>
 		<dependency>
 			<groupId>
