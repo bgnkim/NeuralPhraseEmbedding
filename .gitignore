@@ -4,7 +4,6 @@
 .mtj.tmp/
 
 # Package Files #
-*.jar
 *.war
 *.ear
 
@@ -57,3 +56,15 @@ $RECYCLE.BIN/
 *.msi
 *.msm
 *.msp
+
+# Maven & Eclipse
+# =========================
+target/
+.settings/
+.project
+.classpath
+
+# Compressed Files
+# =========================
+*.bz2
+*.zip

@@ -20,8 +20,8 @@ import edu.stanford.nlp.process.TokenizerFactory;
 import edu.stanford.nlp.trees.Tree;
 
 /**
- * Wrapper of Stanford SU-RNN CVG parser. This singleton wrapper generates score
- * vector for each input sentence.
+ * Wrapper of Stanford SU-RNN CVG parser &amp; URAE phrase embedding. This
+ * singleton wrapper generates score vector for each input sentence.
  *
  * @author Bugeun Kim
  *
@@ -143,7 +143,7 @@ public class StanfordWrapper {
 
 	/**
 	 * From given parse tree, generate score vector, using Stanford SU-RNN
-	 * parser.
+	 * parser. Refer to (Socher et al., ACL 2013)
 	 *
 	 * @param tree
 	 *            to be scored
@@ -169,8 +169,8 @@ public class StanfordWrapper {
 
 	/**
 	 * Get word embedding of given word, from trained embedding. 25 dimensional
-	 * re-implementation of (Collobert & Weston, 2008) in (Turian et al., 2010)
-	 * was used.
+	 * re-implementation of (Collobert &amp; Weston, 2008) in (Turian et al.,
+	 * 2010) was used.
 	 *
 	 * @param word
 	 *            to find

@@ -1,8 +1,8 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>JavaRAE</groupId>
-	<artifactId>JavaRAE</artifactId>
+	<groupId>kr.ac.kaist.ir</groupId>
+	<artifactId>NPE</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<build>
 		<sourceDirectory>src</sourceDirectory>
@@ -37,6 +37,8 @@
 					<locale>ko_KR</locale>
 					<encoding>UTF-8</encoding>
 					<charset>UTF-8</charset>
+					<outputDirectory>${basedir}</outputDirectory>
+					<finalName>${project.artifactId}-latest</finalName>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -59,6 +61,12 @@
 					<show>protected</show>
 					<source>1.7</source>
 					<sourcepath>${basedir}${file.separator}src</sourcepath>
+					<jarOutputDirectory>${basedir}</jarOutputDirectory>
+					<finalName>${project.artifactId}-latest</finalName>
+					<dependencySourceExcludes>
+						<dependencySourceExclude>org.ejml.simple:*</dependencySourceExclude>
+						<dependencySourceExclude>edu.stanford.nlp:*</dependencySourceExclude>
+					</dependencySourceExcludes>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -74,13 +82,18 @@
 				<configuration>
 					<descriptorRefs>
 						<descriptorRef>jar-with-dependencies</descriptorRef>
+						<descriptorRef>bin</descriptorRef>
 					</descriptorRefs>
 					<archive>
 						<manifest>
 							<mainClass>kr.kaist.ir.urae.StanfordWrapper</mainClass>
 						</manifest>
 					</archive>
-					<outputDirectory>${basedir}${file.separator}bin</outputDirectory>
+					<formats>
+						<format>tgz</format>
+					</formats>
+					<outputDirectory>${basedir}</outputDirectory>
+					<finalName>${project.artifactId}-latest</finalName>
 				</configuration>
 			</plugin>
 		</plugins>
