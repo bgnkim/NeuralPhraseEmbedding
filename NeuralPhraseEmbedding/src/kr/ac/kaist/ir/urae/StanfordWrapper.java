@@ -107,7 +107,6 @@ public class StanfordWrapper {
 			final Tree[] children = subtree.children();
 			SimpleMatrix prev = null;
 			for (int i = children.length - 1; i >= 0; i--) {
-				System.out.print(children[i].toString());
 				final SimpleMatrix curr = this.calculateBFS(children[i]);
 				if (prev != null) {
 					final SimpleMatrix W1c1 = this.param.getW1().mult(curr);
@@ -118,12 +117,10 @@ public class StanfordWrapper {
 					prev = curr;
 				}
 			}
-			System.out.println(";");
 
 			return prev;
 		} else if (subtree.isPreTerminal()) {
 			final String word = subtree.getChild(0).value();
-			System.out.println(word);
 			return this.param.getWordVectorOf(word);
 		} else {
 			return this.calculateBFS(subtree.getChild(0));

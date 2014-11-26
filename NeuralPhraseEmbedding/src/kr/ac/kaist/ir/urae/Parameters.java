@@ -56,11 +56,10 @@ public class Parameters {
 	 *
 	 */
 	private Parameters() {
-		final ClassLoader loader = ClassLoader.getSystemClassLoader();
 		this.logger.info("LOADING RNN PARAMETERS...");
-		this.loadParams(loader);
+		this.loadParams();
 		this.logger.info("LOADING WORD EMBEDDINGS...");
-		this.loadWordMap(loader);
+		this.loadWordMap();
 		this.logger.info("DONE.");
 	}
 
@@ -174,13 +173,11 @@ public class Parameters {
 	/**
 	 * Load Trained Parameters of RAE in (Socher et al, NIPS 2011).
 	 *
-	 * @param loader
-	 *            of JAR class loader
-	 *
 	 */
-	private void loadParams(ClassLoader loader) {
-		final JsonReader reader = Json.createReader(loader
-				.getResourceAsStream("kr/ac/kaist/ir/resource/params.json"));
+	private void loadParams() {
+		final JsonReader reader = Json
+				.createReader(ClassLoader
+						.getSystemResourceAsStream("kr/ac/kaist/ir/resource/params.json"));
 		final JsonObject obj = reader.readObject();
 
 		this.W1 = this.constructMatrix(obj.getJsonArray("W1"));
@@ -193,13 +190,11 @@ public class Parameters {
 	 * Load normalized Word embedding of (Collobert & Weston, 2008) in (Socher
 	 * et al, NIPS 2011).
 	 *
-	 * @param loader
-	 *            of JAR class loader
-	 *
 	 */
-	private void loadWordMap(ClassLoader loader) {
-		final JsonReader reader = Json.createReader(loader
-				.getResourceAsStream("kr/ac/kaist/ir/resource/words.json"));
+	private void loadWordMap() {
+		final JsonReader reader = Json
+				.createReader(ClassLoader
+						.getSystemResourceAsStream("kr/ac/kaist/ir/resource/words.json"));
 		// Store the words as JSON object. We convert it on demand.
 		this.words = reader.readObject();
 		this.wordCache = new HashMap<String, SimpleMatrix>();
