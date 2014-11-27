@@ -165,6 +165,19 @@ public class StanfordWrapper {
 	}
 
 	/**
+	 * Get word embedding of given word, from trained embedding. 100 dimensional
+	 * re-implementation of (Collobert &amp; Weston, 2008) in (Turian et al.,
+	 * 2010) was used.
+	 *
+	 * @param word
+	 *            to find
+	 * @return Word Embedding of input word. A column vector with 100 dimension.
+	 */
+	public SimpleMatrix getWordVectorOf(String word) {
+		return this.param.getWordVectorOf(word);
+	}
+
+	/**
 	 * Get word embedding of given word, from trained embedding. 25 dimensional
 	 * re-implementation of (Collobert &amp; Weston, 2008) in (Turian et al.,
 	 * 2010) was used.
@@ -173,7 +186,7 @@ public class StanfordWrapper {
 	 *            to find
 	 * @return Word Embedding of input word. A column vector with 25 dimension.
 	 */
-	public SimpleMatrix getWordVectorOf(String word) {
+	public SimpleMatrix getWordVectorOf25(String word) {
 		return this.model.getWordVector(word);
 	}
 
