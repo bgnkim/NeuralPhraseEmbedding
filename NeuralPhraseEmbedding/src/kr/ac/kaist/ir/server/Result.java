@@ -22,7 +22,7 @@ public class Result implements Serializable {
 	/** Serial ID **/
 	private static final long serialVersionUID = -7697818199190864663L;
 	/** Phrase Embeddings **/
-	private final SimpleMatrix np1Matx, ppMatx, np2Matx;
+	private final SimpleMatrix np1Matx, ppMatx, np2Matx, sentMatx;
 	/** Phrase Strings **/
 	private final String np1Str, ppStr, np2Str;
 
@@ -36,8 +36,10 @@ public class Result implements Serializable {
 	 *            for intermediate prep phrase
 	 * @param np2
 	 *            for 2nd NP phrase
+	 * @param sent
+	 *            for sentence pharse matrix
 	 */
-	public Result(Tree np1, Tree pp, Tree np2) {
+	public Result(Tree np1, Tree pp, Tree np2, SimpleMatrix sent) {
 		final StanfordWrapper instance = StanfordWrapper.getInstance();
 
 		this.np1Str = this.getStringOf(np1);
@@ -47,6 +49,7 @@ public class Result implements Serializable {
 		this.np1Matx = instance.getPhraseVectorOf(np1);
 		this.np2Matx = instance.getPhraseVectorOf(np2);
 		this.ppMatx = instance.getWordVectorOf(this.ppStr);
+		this.sentMatx = sent;
 	}
 
 	/**
@@ -74,6 +77,15 @@ public class Result implements Serializable {
 	 */
 	public SimpleMatrix getMatrixOfPP() {
 		return this.ppMatx;
+	}
+
+	/**
+	 * Returns Sentence's Word Embedding
+	 *
+	 * @return Phrase Embedding of Sentence
+	 */
+	public SimpleMatrix getMatrixOfSentence() {
+		return this.sentMatx;
 	}
 
 	/**

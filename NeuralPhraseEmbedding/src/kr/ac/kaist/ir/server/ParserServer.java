@@ -12,6 +12,9 @@ import java.util.Scanner;
 import java.util.logging.Logger;
 
 import kr.ac.kaist.ir.urae.StanfordWrapper;
+
+import org.ejml.simple.SimpleMatrix;
+
 import edu.stanford.nlp.trees.Tree;
 
 /**
@@ -71,10 +74,14 @@ public class ParserServer extends Thread {
 	 *
 	 * @param tree
 	 *            for find NPN structure.
+	 * @param result
+	 *            LinkedList to be accumulated into.
+	 * @param sentence
+	 *            for top-level sentence.
 	 * @return LinkedList of Result instances.
 	 */
 	private LinkedList<Result> findNPNStructure(Tree tree,
-			LinkedList<Result> result) {
+			LinkedList<Result> result, SimpleMatrix sentence) {
 		if (tree.isLeaf() || tree.isPreTerminal()) {
 			return result;
 		} else {
@@ -85,14 +92,14 @@ public class ParserServer extends Thread {
 						&& tree.getChild(i).value().equalsIgnoreCase("PP")) {
 					result.add(new Result(tree.getChild(i - 1), tree
 							.getChild(i).firstChild(), tree.getChild(i)
-							.lastChild()));
+							.lastChild(), sentence));
 				}
 			}
 
 			for (int i = 0; i < length; i++) {
 				final Tree child = tree.getChild(i);
 				if (!child.isLeaf() && !child.isPreTerminal()) {
-					this.findNPNStructure(child, result);
+					this.findNPNStructure(child, result, sentence);
 				}
 			}
 
@@ -102,14 +109,13 @@ public class ParserServer extends Thread {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see java.lang.Thread#run()
 	 */
 	@Override
 	public void run() {
-		try {
-
-			while (true) {
+		while (true) {
+			try {
 				final Socket accept = this.socket.accept();
 				this.logger.info(accept.getInetAddress()
 						+ " RECEIVED connection");
@@ -120,19 +126,14 @@ public class ParserServer extends Thread {
 				while (in.hasNextLine()) {
 					final String line = in.nextLine();
 					if (line.length() > 0) {
-						this.logger.info(accept.getInetAddress()
-								+ " READ LINE : " + line);
 						final Tree tree = this.instance.parseTree(line);
-						this.logger.info(tree.toString());
 						final LinkedList<Result> result = this
 								.findNPNStructure(tree,
-										new LinkedList<Result>());
+										new LinkedList<Result>(),
+										this.instance.getPhraseVectorOf(tree));
+
 						out.writeObject(result);
 						out.flush();
-						this.logger
-						.info(accept.getInetAddress()
-								+ " PARSE COMPLETE : #ENTRY = "
-								+ result.size());
 					} else {
 						break;
 					}
@@ -142,15 +143,15 @@ public class ParserServer extends Thread {
 				in.close();
 				out.close();
 				accept.close();
+			} catch (final Exception e) {
+				e.printStackTrace();
 			}
-		} catch (final Exception e) {
-			e.printStackTrace();
 		}
 	}
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see java.lang.Thread#start()
 	 */
 	@Override
