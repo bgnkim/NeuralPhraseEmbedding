@@ -23,9 +23,9 @@ public class ParserClientTester {
 		try {
 			final ParserClient client = new ParserClient("localhost");
 			final Scanner scan = new Scanner(System.in);
+			System.out.println("Phrase> ");
 
-			do {
-				System.out.println("Phrase> ");
+			while (scan.hasNextLine()) {
 				final LinkedList<Result> result = client.getParsedResultOf(scan
 						.nextLine());
 				System.out.println("COUNT = " + result.size());
@@ -33,7 +33,8 @@ public class ParserClientTester {
 					System.out.println(r.getPhraseString());
 					System.out.println(r.getPPString());
 				}
-			} while (scan.hasNextLine());
+				System.out.println("Phrase> ");
+			}
 			scan.close();
 			client.close();
 		} catch (final Exception e) {

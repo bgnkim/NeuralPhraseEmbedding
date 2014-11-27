@@ -75,8 +75,12 @@ public class ParserClient {
 	@SuppressWarnings("unchecked")
 	public LinkedList<Result> getParsedResultOf(String sentence)
 			throws IOException, ClassNotFoundException {
-		this.send.write(sentence + "\n");
-		this.send.flush();
-		return ((LinkedList<Result>) this.receive.readObject());
+		if (sentence.length() == 0) {
+			return new LinkedList<Result>();
+		} else {
+			this.send.write(sentence + "\n");
+			this.send.flush();
+			return ((LinkedList<Result>) this.receive.readObject());
+		}
 	}
 }
