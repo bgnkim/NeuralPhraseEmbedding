@@ -89,6 +89,7 @@ public class ParserClient {
 	@SuppressWarnings("unchecked")
 	public LinkedList<Result> getParsedResultOf(String sentence)
 			throws IOException, ClassNotFoundException {
+		sentence = sentence.trim();
 		if (sentence.length() == 0) {
 			return new LinkedList<Result>();
 		} else {

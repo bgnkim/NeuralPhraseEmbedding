@@ -61,7 +61,7 @@ public class ParserServer extends Thread {
 	/**
 	 * Service port
 	 */
-	public static final int PORT = 59900;
+	public static final int PORT = 59800;
 
 	/** StanfordWrapper instance **/
 	private static StanfordWrapper instance;
@@ -89,9 +89,7 @@ public class ParserServer extends Thread {
 	 */
 	private LinkedList<Result> findNPNStructure(Tree tree,
 			LinkedList<Result> result, SimpleMatrix sentence) {
-		if (tree.isLeaf() || tree.isPreTerminal()) {
-			return result;
-		} else {
+		if (!tree.isLeaf() && !tree.isPreTerminal() && (tree.numChildren() > 0)) {
 			final int length = tree.numChildren();
 
 			for (int i = 1; i < length; i++) {
@@ -109,9 +107,9 @@ public class ParserServer extends Thread {
 					this.findNPNStructure(child, result, sentence);
 				}
 			}
-
-			return result;
 		}
+
+		return result;
 	}
 
 	/**
