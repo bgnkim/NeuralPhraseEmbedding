@@ -9,6 +9,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.LinkedList;
 import java.util.Scanner;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import kr.ac.kaist.ir.urae.StanfordWrapper;
@@ -31,42 +32,50 @@ public class ParserServer extends Thread {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		final ParserServer server = new ParserServer(12);
-		server.start();
+		try {
+			@SuppressWarnings("resource")
+			final ServerSocket socket = new ServerSocket(ParserServer.PORT);
+			ParserServer.instance = StanfordWrapper.getInstance();
+			ParserServer.logger = Logger.getAnonymousLogger();
+			ParserServer.logger.info("Server Started with PORT "
+					+ ParserServer.PORT);
+
+			while (true) {
+				try {
+					final Socket accept = socket.accept();
+					new ParserServer(accept).start();
+				} catch (final Exception e) {
+					e.printStackTrace();
+				}
+			}
+		} catch (final IOException e) {
+			ParserServer.logger.log(Level.SEVERE, "Socket Exception", e);
+		}
 	}
 
 	/** logger **/
-	private Logger logger;
-	/** Threads for service **/
-	private Thread[] threads;
+	private static Logger logger;
+	/** Socket per Thread **/
+	private final Socket accept;
 
 	/**
 	 * Service port
 	 */
 	public static final int PORT = 59900;
 
-	/** Socket for receive request **/
-	private ServerSocket socket;
 	/** StanfordWrapper instance **/
-	private StanfordWrapper instance;
+	private static StanfordWrapper instance;
 
 	/**
-	 * Generate Parser Server with given amount of number.
+	 * Generate Parser Server with given socket
 	 *
-	 * @param num
-	 *            is the number of servers.
+	 * @param accept
+	 *            is connection Socket.
 	 */
-	public ParserServer(int num) {
-		try {
-			this.socket = new ServerSocket(ParserServer.PORT);
-			this.instance = StanfordWrapper.getInstance();
-			this.logger = Logger.getAnonymousLogger();
-
-			this.logger.info("Server Started with PORT " + ParserServer.PORT);
-			this.threads = new Thread[num];
-		} catch (final IOException e) {
-			e.printStackTrace();
-		}
+	public ParserServer(Socket accept) {
+		this.accept = accept;
+		ParserServer.logger.info(accept.getInetAddress()
+				+ " RECEIVED connection");
 	}
 
 	/**
@@ -107,58 +116,40 @@ public class ParserServer extends Thread {
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
+	/**
+	 * Run parser thread.
+	 *
 	 * @see java.lang.Thread#run()
-	 */
+	 **/
 	@Override
 	public void run() {
-		while (true) {
-			try {
-				final Socket accept = this.socket.accept();
-				this.logger.info(accept.getInetAddress()
-						+ " RECEIVED connection");
-				final Scanner in = new Scanner(accept.getInputStream());
-				final ObjectOutputStream out = new ObjectOutputStream(
-						accept.getOutputStream());
+		try {
+			final Scanner in = new Scanner(this.accept.getInputStream());
+			final ObjectOutputStream out = new ObjectOutputStream(
+					this.accept.getOutputStream());
 
-				while (in.hasNextLine()) {
-					final String line = in.nextLine();
-					if (line.length() > 0) {
-						final Tree tree = this.instance.parseTree(line);
-						final LinkedList<Result> result = this
-								.findNPNStructure(tree,
-										new LinkedList<Result>(),
-										this.instance.getPhraseVectorOf(tree));
+			while (in.hasNextLine()) {
+				final String line = in.nextLine();
+				if (line.length() > 0) {
+					final Tree tree = ParserServer.instance.parseTree(line);
+					final LinkedList<Result> result = this.findNPNStructure(
+							tree, new LinkedList<Result>(),
+							ParserServer.instance.getPhraseVectorOf(tree));
 
-						out.writeObject(result);
-						out.flush();
-					} else {
-						break;
-					}
+					out.writeObject(result);
+					out.flush();
+				} else {
+					break;
 				}
-
-				this.logger.info(accept.getInetAddress() + " CONN closed");
-				in.close();
-				out.close();
-				accept.close();
-			} catch (final Exception e) {
-				e.printStackTrace();
 			}
-		}
-	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Thread#start()
-	 */
-	@Override
-	public synchronized void start() {
-		for (int i = 0; i < this.threads.length; i++) {
-			this.threads[i] = new Thread(this);
-			this.threads[i].start();
+			ParserServer.logger.info(this.accept.getInetAddress()
+					+ " CONN closed");
+			in.close();
+			out.close();
+			this.accept.close();
+		} catch (final Exception e) {
+			ParserServer.logger.log(Level.WARNING, "ERROR in Thread", e);
 		}
 	}
 }
