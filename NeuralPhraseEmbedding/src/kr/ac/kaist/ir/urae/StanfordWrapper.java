@@ -122,8 +122,10 @@ public class StanfordWrapper {
 		} else if (subtree.isPreTerminal()) {
 			final String word = subtree.getChild(0).value();
 			return this.param.getWordVectorOf(word);
-		} else {
+		} else if (subtree.numChildren() == 1) {
 			return this.calculateBFS(subtree.getChild(0));
+		} else {
+			return null;
 		}
 	}
 

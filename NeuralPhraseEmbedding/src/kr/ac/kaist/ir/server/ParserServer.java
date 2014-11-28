@@ -127,13 +127,23 @@ public class ParserServer extends Thread {
 			while (in.hasNextLine()) {
 				final String line = in.nextLine();
 				if (line.length() > 0) {
-					final Tree tree = ParserServer.instance.parseTree(line);
-					final LinkedList<Result> result = this.findNPNStructure(
-							tree, new LinkedList<Result>(),
-							ParserServer.instance.getPhraseVectorOf(tree));
-
-					out.writeObject(result);
-					out.flush();
+					try {
+						final Tree tree = ParserServer.instance.parseTree(line);
+						LinkedList<Result> result = new LinkedList<Result>();
+						if (tree.numChildren() > 0) {
+							result = this.findNPNStructure(tree, result,
+									ParserServer.instance
+											.getPhraseVectorOf(tree));
+						} else {
+							ParserServer.logger
+							.info("Weird sentence : " + line);
+						}
+						out.writeObject(result);
+						out.flush();
+					} catch (final Exception e) {
+						ParserServer.logger.log(Level.WARNING,
+								"ERROR with sentence : " + line, e);
+					}
 				} else {
 					break;
 				}
