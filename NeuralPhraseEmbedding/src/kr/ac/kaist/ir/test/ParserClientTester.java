@@ -21,7 +21,7 @@ public class ParserClientTester {
 	 **/
 	public static void main(String[] args) {
 		try {
-			final ParserClient client = new ParserClient("localhost");
+			final ParserClient client = new ParserClient("irbig2.kaist.ac.kr");
 			final Scanner scan = new Scanner(System.in);
 			System.out.println("Phrase> ");
 

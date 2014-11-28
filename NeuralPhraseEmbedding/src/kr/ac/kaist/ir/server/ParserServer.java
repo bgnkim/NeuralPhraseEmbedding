@@ -44,6 +44,8 @@ public class ParserServer extends Thread {
 				try {
 					final Socket accept = socket.accept();
 					new ParserServer(accept).start();
+
+					System.out.print("+");
 				} catch (final Exception e) {
 					e.printStackTrace();
 				}
@@ -133,10 +135,10 @@ public class ParserServer extends Thread {
 						if (tree.numChildren() > 0) {
 							result = this.findNPNStructure(tree, result,
 									ParserServer.instance
-											.getPhraseVectorOf(tree));
+									.getPhraseVectorOf(tree));
 						} else {
 							ParserServer.logger
-							.info("Weird sentence : " + line);
+									.info("Weird sentence : " + line);
 						}
 						out.writeObject(result);
 						out.flush();
@@ -151,6 +153,7 @@ public class ParserServer extends Thread {
 
 			in.close();
 			out.close();
+			System.out.print("-");
 			this.accept.close();
 		} catch (final Exception e) {
 			ParserServer.logger.log(Level.WARNING, "ERROR in Thread", e);
