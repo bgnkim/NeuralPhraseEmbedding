@@ -74,8 +74,6 @@ public class ParserServer extends Thread {
 	 */
 	public ParserServer(Socket accept) {
 		this.accept = accept;
-		ParserServer.logger.info(accept.getInetAddress()
-				+ " RECEIVED connection");
 	}
 
 	/**
@@ -143,8 +141,6 @@ public class ParserServer extends Thread {
 				}
 			}
 
-			ParserServer.logger.info(this.accept.getInetAddress()
-					+ " CONN closed");
 			in.close();
 			out.close();
 			this.accept.close();

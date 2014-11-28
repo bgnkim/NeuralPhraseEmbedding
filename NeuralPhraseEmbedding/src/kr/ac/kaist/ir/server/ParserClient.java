@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
+import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.LinkedList;
 
@@ -19,11 +20,11 @@ import java.util.LinkedList;
  */
 public class ParserClient {
 	/** Socket of communication **/
-	private final Socket socket;
+	private Socket socket;
 	/** Writer for Send Sentences **/
-	private final BufferedWriter send;
+	private BufferedWriter send;
 	/** Reader for Retrieving Result Objects **/
-	private final ObjectInputStream receive;
+	private ObjectInputStream receive;
 
 	/**
 	 * <p>
@@ -41,11 +42,24 @@ public class ParserClient {
 	 * @throws IOException
 	 *             when failed to open streams.
 	 */
-	public ParserClient(String host) throws UnknownHostException, IOException {
-		this.socket = new Socket(host, ParserServer.PORT);
-		this.send = new BufferedWriter(new OutputStreamWriter(
-				this.socket.getOutputStream()));
-		this.receive = new ObjectInputStream(this.socket.getInputStream());
+	public ParserClient(String host) throws IOException {
+		while (this.socket == null) {
+			try {
+				this.socket = new Socket(host, ParserServer.PORT);
+				this.send = new BufferedWriter(new OutputStreamWriter(
+						this.socket.getOutputStream()));
+				this.receive = new ObjectInputStream(
+						this.socket.getInputStream());
+				break;
+			} catch (final SocketException e) {
+				try {
+					synchronized (this) {
+						Thread.sleep(10);
+					}
+				} catch (final Exception ie) {
+				}
+			}
+		}
 	}
 
 	/**
