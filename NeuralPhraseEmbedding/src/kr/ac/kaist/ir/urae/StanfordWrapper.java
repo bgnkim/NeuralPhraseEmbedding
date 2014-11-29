@@ -34,6 +34,10 @@ public class StanfordWrapper {
 	 * @return another instance of Embedding Wrapper.
 	 */
 	public static StanfordWrapper getAnotherInstance() {
+		if (StanfordWrapper.instance == null) {
+			StanfordWrapper.instance = new StanfordWrapper();
+		}
+
 		return new StanfordWrapper(StanfordWrapper.instance);
 	}
 
