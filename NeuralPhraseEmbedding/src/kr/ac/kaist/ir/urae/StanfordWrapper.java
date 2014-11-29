@@ -29,6 +29,15 @@ import edu.stanford.nlp.trees.Tree;
  */
 public class StanfordWrapper {
 	/**
+	 * For multi-threading only.
+	 *
+	 * @return another instance of Embedding Wrapper.
+	 */
+	public static StanfordWrapper getAnotherInstance() {
+		return new StanfordWrapper(StanfordWrapper.instance);
+	}
+
+	/**
 	 * Generates singleton instance and pass it to caller.
 	 *
 	 * @return Singleton instance of Embedding Wrapper.
@@ -90,6 +99,19 @@ public class StanfordWrapper {
 				new CoreLabelTokenFactory(), "");
 		// Load URAE parameters.
 		this.param = Parameters.getInstance();
+	}
+
+	/**
+	 * Copy instance to new one. Copy the models, token factory and so on.
+	 *
+	 * @param wrapper
+	 *            to be copied.
+	 */
+	private StanfordWrapper(StanfordWrapper wrapper) {
+		this.parser = LexicalizedParser.copyLexicalizedParser(wrapper.parser);
+		this.model = wrapper.model;
+		this.tokenizerFactory = wrapper.tokenizerFactory;
+		this.param = wrapper.param;
 	}
 
 	/**
