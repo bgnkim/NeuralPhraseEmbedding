@@ -10,6 +10,8 @@ import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.util.LinkedList;
 
+import kr.ac.kaist.ir.urae.Result;
+
 /**
  * Client helper for Parser Server-Client communication
  *

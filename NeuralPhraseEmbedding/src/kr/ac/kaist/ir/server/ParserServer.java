@@ -12,6 +12,7 @@ import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import kr.ac.kaist.ir.urae.Result;
 import kr.ac.kaist.ir.urae.StanfordWrapper;
 
 import org.ejml.simple.SimpleMatrix;

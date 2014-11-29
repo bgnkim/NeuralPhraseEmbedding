@@ -7,7 +7,7 @@ import java.util.LinkedList;
 import java.util.Scanner;
 
 import kr.ac.kaist.ir.server.ParserClient;
-import kr.ac.kaist.ir.server.Result;
+import kr.ac.kaist.ir.urae.Result;
 
 /**
  * Test Client for ParserServer-Client connection.

@@ -4,6 +4,7 @@
 package kr.ac.kaist.ir.urae;
 
 import java.io.StringReader;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -127,6 +128,55 @@ public class StanfordWrapper {
 		} else {
 			return null;
 		}
+	}
+
+	/**
+	 * Find NP-PP(IN-NP) structure from the given tree, with DFS.
+	 *
+	 * @param sentence
+	 *            for top-level sentence.
+	 * @return LinkedList of Result instances.
+	 */
+	public LinkedList<Result> findNPNStructure(String sentence) {
+		final Tree tree = this.parseTree(sentence);
+		final SimpleMatrix matx = this.getPhraseVectorOf(tree);
+		return this.findNPNStructure(tree, new LinkedList<Result>(), matx);
+	}
+
+	/**
+	 * Find NP-PP(IN-NP) structure from the given tree, with DFS.
+	 *
+	 * @param tree
+	 *            for find NPN structure.
+	 * @param result
+	 *            LinkedList to be accumulated into.
+	 * @param sentence
+	 *            for top-level sentence.
+	 * @return LinkedList of Result instances.
+	 */
+	private LinkedList<Result> findNPNStructure(Tree tree,
+			LinkedList<Result> result, SimpleMatrix sentence) {
+		if (!tree.isLeaf() && !tree.isPreTerminal() && (tree.numChildren() > 0)) {
+			final int length = tree.numChildren();
+
+			for (int i = 1; i < length; i++) {
+				if (tree.getChild(i - 1).value().equalsIgnoreCase("NP")
+						&& tree.getChild(i).value().equalsIgnoreCase("PP")) {
+					result.add(new Result(tree.getChild(i - 1), tree
+							.getChild(i).firstChild(), tree.getChild(i)
+							.lastChild(), sentence));
+				}
+			}
+
+			for (int i = 0; i < length; i++) {
+				final Tree child = tree.getChild(i);
+				if (!child.isLeaf() && !child.isPreTerminal()) {
+					this.findNPNStructure(child, result, sentence);
+				}
+			}
+		}
+
+		return result;
 	}
 
 	/**
